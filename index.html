@@ -397,37 +397,6 @@
   /* CANVAS */
   #confetti{position:fixed;inset:0;z-index:60;pointer-events:none}
 
-  /* PERSONALIZE */
-  .edit-btn{
-    position:fixed;right:18px;bottom:18px;z-index:20;
-    width:46px;height:46px;border-radius:50%;
-    border:1px solid rgba(255,255,255,.12);
-    color:#f7e8ee;background:rgba(18,10,22,.72);
-    backdrop-filter:blur(12px);cursor:pointer;
-    box-shadow:0 10px 30px rgba(0,0,0,.25);
-  }
-  .modal{
-    position:fixed;inset:0;z-index:80;
-    display:grid;place-items:center;padding:22px;
-    background:rgba(7,4,9,.72);backdrop-filter:blur(14px);
-    opacity:0;visibility:hidden;transition:.3s ease;
-  }
-  .modal.show{opacity:1;visibility:visible}
-  .modal-card{
-    width:min(94vw,520px);border-radius:26px;
-    padding:28px;background:#fffaf6;color:#2c1720;
-    box-shadow:0 30px 80px rgba(0,0,0,.45)
-  }
-  .modal-card h3{font-family:Georgia,serif;font-size:2rem;margin:0 0 8px}
-  .modal-card p{color:#735867;line-height:1.5;margin:0 0 20px}
-  label{display:block;font-size:.82rem;color:#745565;margin:13px 0 6px;font-weight:700}
-  input{
-    width:100%;border:1px solid #decbd2;border-radius:13px;padding:13px 14px;
-    background:white;font:inherit;color:#321621;outline:none
-  }
-  input:focus{border-color:#c77490;box-shadow:0 0 0 3px rgba(199,116,144,.1)}
-  .modal-actions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end}
-  .modal .btn.secondary{color:#684151;background:#efe6e2;border-color:#e4d6d1}
 
   @media (max-width:850px){
     .cards{grid-template-columns:1fr}
@@ -443,7 +412,6 @@
     .hero{padding-inline:18px}
     .letter-stage{min-height:600px}
     .envelope{min-height:330px}
-    .edit-btn{right:12px;bottom:12px}
   }
 </style>
 </head>
@@ -470,7 +438,7 @@
   <main>
     <section class="hero">
       <div class="hero-inner">
-        <div class="hero-badge">♥ Feliz aniversário, <span data-wife>meu amor</span></div>
+        <div class="hero-badge">♥ Feliz aniversário, <span>meu amor</span></div>
         <h2>Você é meu <span class="accent">lar</span><br>em forma de pessoa.</h2>
         <p class="hero-lead">
           Hoje eu não celebro apenas o dia em que você nasceu. Celebro o dia em que o mundo
@@ -601,7 +569,7 @@
 
           <article class="letter" id="letter">
             <button class="close-letter" id="closeLetter" aria-label="Fechar carta">×</button>
-            <h3>Para você, <span data-wife>meu amor</span>.</h3>
+            <h3>Para você, <span>meu amor</span>.</h3>
 
             <p>
               Hoje é seu aniversário, mas eu sinto que quem ganhou o presente fui eu desde o dia
@@ -644,7 +612,7 @@
               Feliz aniversário. Obrigado por ser você. Obrigado por ser nós.
             </p>
 
-            <p class="signature">Com todo o meu amor,<br><span data-me>eu</span> ♥</p>
+            <p class="signature">Com todo o meu amor,<br><span>eu</span> ♥</p>
           </article>
         </div>
       </div>
@@ -652,7 +620,7 @@
 
     <section class="final">
       <div class="heart">♥</div>
-      <h2>Feliz aniversário,<br><span data-wife>meu amor</span>.</h2>
+      <h2>Feliz aniversário,<br><span>meu amor</span>.</h2>
       <p>
         Que esse novo ciclo seja tão bonito quanto a vida que eu ainda quero construir com você.
         Hoje, amanhã e em todos os “depois” que vierem.
@@ -665,67 +633,8 @@
   </main>
 </div>
 
-<button class="edit-btn" id="editBtn" title="Personalizar nomes">✎</button>
-
-<div class="modal" id="modal">
-  <div class="modal-card">
-    <h3>Personalizar</h3>
-    <p>Coloque os nomes de vocês. As alterações ficam salvas neste navegador.</p>
-
-    <label for="wifeName">Nome dela</label>
-    <input id="wifeName" placeholder="Ex.: Ana" />
-
-    <label for="myName">Seu nome</label>
-    <input id="myName" placeholder="Ex.: Ricardo" />
-
-    <label for="childName">Nome do filho (opcional)</label>
-    <input id="childName" placeholder="Ex.: Gabriel" />
-
-    <div class="modal-actions">
-      <button class="btn secondary" id="cancelEdit">Cancelar</button>
-      <button class="btn primary" id="saveEdit">Salvar</button>
-    </div>
-  </div>
-</div>
 
 <script>
-/* =========================================================
-   PERSONALIZAÇÃO
-   Você pode usar o botão ✎ na tela OU alterar os valores abaixo.
-   ========================================================= */
-const DEFAULTS = {
-  wife: "meu amor",
-  me: "eu",
-  child: "nosso filho"
-};
-
-const saved = JSON.parse(localStorage.getItem("birthdayLovePage") || "{}");
-let profile = {
-  wife: saved.wife || DEFAULTS.wife,
-  me: saved.me || DEFAULTS.me,
-  child: saved.child || DEFAULTS.child
-};
-
-function applyProfile(){
-  document.querySelectorAll("[data-wife]").forEach(el => {
-    el.textContent = profile.wife || DEFAULTS.wife;
-  });
-  document.querySelectorAll("[data-me]").forEach(el => {
-    el.textContent = profile.me || DEFAULTS.me;
-  });
-
-  const familyText = document.querySelector(".family-text p");
-  if(profile.child && profile.child !== DEFAULTS.child){
-    familyText.innerHTML = `...eu vejo a prova mais bonita de tudo o que já construímos juntos.
-      Em você eu não vejo apenas a mulher que amo. Vejo também a mãe incrível de <strong>${escapeHtml(profile.child)}</strong>,
-      a força da nossa casa e alguém que tornou a minha ideia de futuro muito mais bonita do que eu um dia imaginei.`;
-  }
-}
-function escapeHtml(s){
-  return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-}
-applyProfile();
-
 /* INTRO */
 const intro = document.getElementById("intro");
 document.getElementById("startBtn").addEventListener("click", () => {
@@ -886,32 +795,6 @@ document.getElementById("musicBtn").addEventListener("click", async (e)=>{
     playing=false;
     e.currentTarget.textContent="♫ Tocar uma melodia";
   }, notes.length*340+500);
-});
-
-/* PERSONALIZATION MODAL */
-const modal=document.getElementById("modal");
-const wifeInput=document.getElementById("wifeName");
-const meInput=document.getElementById("myName");
-const childInput=document.getElementById("childName");
-
-document.getElementById("editBtn").addEventListener("click",()=>{
-  wifeInput.value=profile.wife===DEFAULTS.wife?"":profile.wife;
-  meInput.value=profile.me===DEFAULTS.me?"":profile.me;
-  childInput.value=profile.child===DEFAULTS.child?"":profile.child;
-  modal.classList.add("show");
-});
-document.getElementById("cancelEdit").addEventListener("click",()=>modal.classList.remove("show"));
-modal.addEventListener("click",e=>{if(e.target===modal)modal.classList.remove("show")});
-document.getElementById("saveEdit").addEventListener("click",()=>{
-  profile={
-    wife:wifeInput.value.trim()||DEFAULTS.wife,
-    me:meInput.value.trim()||DEFAULTS.me,
-    child:childInput.value.trim()||DEFAULTS.child
-  };
-  localStorage.setItem("birthdayLovePage",JSON.stringify(profile));
-  applyProfile();
-  modal.classList.remove("show");
-  heartBurst(10);
 });
 
 /* Gentle random hearts */
